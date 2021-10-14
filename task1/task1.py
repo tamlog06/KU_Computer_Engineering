@@ -78,7 +78,7 @@ def bisection_all(n, x: list):
     return result
 
 #Newton法（方程式の関数項、探索の開始点、微小量、誤差範囲、最大反復回数）
-def newton(func_f, x0, eps=1e-9, error=1e-9, max_loop=100):
+def newton(n, x0, eps=1e-9, error=1e-9, max_loop=100):
     num_calc = 0  #計算回数
     print("{:3d}:  x = {:.15f}".format(num_calc, x0))
 
@@ -110,6 +110,12 @@ def newton(func_f, x0, eps=1e-9, error=1e-9, max_loop=100):
 
     return x0
 
+def newton_all(n, x: list):
+    result = []
+    for x0 in x:
+        result.append(newton(n, x0))
+    return set(result)
+
 #可視化（方程式の関数項、グラフ左端、グラフ右端、方程式の解）
 def visualization(n, x_min, x_max, x_solved):
     plt.xlabel("$x$")  #x軸の名前
@@ -131,15 +137,18 @@ def visualization(n, x_min, x_max, x_solved):
 if __name__ == "__main__":
     n = 5
     k = 3
-    x = [[-1, -0.75], [-0.75, -0.3], [-0.3, 0.25], [0.25, 0.75], [0.75, 1.0]]
+    x_legendre = [[-1, -0.75], [-0.75, -0.3], [-0.3, 0.25], [0.25, 0.75], [0.75, 1.0]]
+    x_newton = [-1, -0.5, 0, 0.5, 0.9]
 
     print(comb(n, k))
-    print(Legendre_a(n))
-    print(Legendre_P(n, -0.99))
+    print(Legendre_a(5))
+    print(Legendre_a(10))
+    # print(Legendre_P(n, -0.99))
 
-    result = bisection_all(n, x)
-    visualization(n, -1, 1, result)
-    print(result)
+    result_bisection = bisection_all(n, x_legendre)
+    visualization(n, -1, 1, result_bisection)
+    print(result_bisection)
 
-    result = newton(n, -1)
-    print(result)
+    result_newton = newton_all(n, x_newton)
+    visualization(n, -1, 1, result_newton)
+    print(result_newton)
