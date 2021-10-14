@@ -33,7 +33,7 @@ def Legendre_P(n: float, x: float):
 
 
 #二分法（方程式の関数項、探索区間の左端、探索区間の右端、誤差範囲、最大反復回数）
-def bisection(n, x_min, x_max, error=1e-9, max_loop=100):
+def bisection(n, x_min, x_max, error=1e-9, max_loop=100, option=False):
     # 計算途中の値と反復数を含むリスト
     middle_value = []
     #初期値を表示
@@ -72,17 +72,23 @@ def bisection(n, x_min, x_max, error=1e-9, max_loop=100):
     print("x = {:.15f}".format(x_mid))
     print(num_calc)
 
-    return x_mid, middle_value, num_calc
+    if option:
+        return x_mid, middle_value
+    else:
+        return x_mid
 
 # 二分法で全ての解を出す
 def bisection_all(n, x: list):
     result = []
     for x_min, x_max in x:
-        result.append(bisection(n, x_min, x_max)[0])
+        result.append(bisection(n, x_min, x_max))
     return result
 
 #Newton法（方程式の関数項、探索の開始点、微小量、誤差範囲、最大反復回数）
-def newton(n, x0, eps=1e-9, error=1e-9, max_loop=100):
+def newton(n, x0, eps=1e-9, error=1e-9, max_loop=100, option=False):
+    # 計算途中の値と反復数を含むリスト
+    middle_value = []
+
     num_calc = 0  #計算回数
     print("{:3d}:  x = {:.15f}".format(num_calc, x0))
 
@@ -100,6 +106,8 @@ def newton(n, x0, eps=1e-9, error=1e-9, max_loop=100):
         x1 = x0 - Legendre_P(n, x0) / P_df
 
         num_calc += 1  #計算回数を数える
+
+        middle_value.append([x1, num_calc])
         print("{:3d}:  x = {:.15f}".format(num_calc, x0))
 
         #「誤差範囲が一定値以下」または「計算回数が一定値以上」ならば終了
@@ -112,7 +120,10 @@ def newton(n, x0, eps=1e-9, error=1e-9, max_loop=100):
     #最終的に得られた解
     print("x = {:.15f}".format(x0))
 
-    return x0
+    if option:
+        return x0, middle_value
+    else:
+        return x0
 
 def newton_all(n, x: list):
     result = []
@@ -177,6 +188,10 @@ if __name__ == "__main__":
     # visualization(n, -1, 1, result_newton)
     # print(result_newton)
 
-    result, middle_value, num_calc = bisection(n, -1, -0.75)
-    true_value = bisection(n, -1, -0.75, error=1e-15, max_loop=1000)[0]
+    result, middle_value = bisection(n, -1, -0.75, option=True)
+    true_value = bisection(n, -1, -0.75, error=1e-15, max_loop=1000)
+    visualization_convergence(n, middle_value, true_value)
+    
+    result, middle_value = newton(n, -1, option=True)
+    true_value = newton(n, -1, eps=1e-15, error=1e-15, max_loop=1000)
     visualization_convergence(n, middle_value, true_value)
