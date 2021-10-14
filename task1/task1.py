@@ -34,6 +34,8 @@ def Legendre_P(n: float, x: float):
 
 #二分法（方程式の関数項、探索区間の左端、探索区間の右端、誤差範囲、最大反復回数）
 def bisection(n, x_min, x_max, error=1e-9, max_loop=100):
+    # 計算途中の値と反復数を含むリスト
+    middle_value = []
     #初期値を表示
     num_calc = 0  #計算回数
     print("{:3d}:  {:.15f} <= x <= {:.15f}".format(num_calc, x_min, x_max))
@@ -46,7 +48,7 @@ def bisection(n, x_min, x_max, error=1e-9, max_loop=100):
     #ずっと繰り返す
     while(True):
         #新たな中間値の計算
-        x_mid = (x_max +x_min)/2.0
+        x_mid = (x_max + x_min)/2.0
 
         #探索区間を更新
         if (0.0 < Legendre_P(n, x_mid)*Legendre_P(n, x_max)):  #中間と右端の値が同じの時
@@ -58,6 +60,8 @@ def bisection(n, x_min, x_max, error=1e-9, max_loop=100):
         num_calc += 1  #計算回数を数える
         print("{:3d}:  {:.15f} <= x <= {:.15f}".format(num_calc, x_min, x_max))
 
+        middle_value.append([x_mid, num_calc])
+
         #「誤差範囲が一定値以下」または「計算回数が一定値以上」ならば終了
         if x_max-x_min <= error:
             break
@@ -68,13 +72,13 @@ def bisection(n, x_min, x_max, error=1e-9, max_loop=100):
     print("x = {:.15f}".format(x_mid))
     print(num_calc)
 
-    return x_mid
+    return x_mid, middle_value, num_calc
 
 # 二分法で全ての解を出す
 def bisection_all(n, x: list):
     result = []
     for x_min, x_max in x:
-        result.append(bisection(n, x_min, x_max))
+        result.append(bisection(n, x_min, x_max)[0])
     return result
 
 #Newton法（方程式の関数項、探索の開始点、微小量、誤差範囲、最大反復回数）
@@ -134,21 +138,45 @@ def visualization(n, x_min, x_max, x_solved):
         plt.text(x,0.0, "$x$ = {:.9f}".format(x), va='bottom', color='#0000ff')
     plt.show()  #グラフを表示
 
+def visualization_convergence(n, middle_value, true_value):
+    plt.xlabel("$loop$")
+    plt.ylabel("$error$")
+    plt.grid()
+    plt.axhline(0, color='#000000')
+
+
+    for middle, loop in middle_value:
+        # print(true_value)
+        # print(middle)
+        plt.scatter(loop, abs(true_value - middle), c="b")
+        # plt.text(loop ,0.0, "$x$ = {:.9f}".format(loop), va='bottom', color='#0000ff')
+
+    ax = plt.gca()
+    ax.spines['top'].set_color('none')
+    ax.set_yscale('log')  # メイン: y軸をlogスケールで描く
+    
+    plt.grid(which="both") # グリッド表示。"both"はxy軸両方にグリッドを描く。
+    plt.show()
+
 if __name__ == "__main__":
     n = 5
     k = 3
     x_legendre = [[-1, -0.75], [-0.75, -0.3], [-0.3, 0.25], [0.25, 0.75], [0.75, 1.0]]
     x_newton = [-1, -0.5, 0, 0.5, 0.9]
 
-    print(comb(n, k))
-    print(Legendre_a(5))
-    print(Legendre_a(10))
-    # print(Legendre_P(n, -0.99))
+    # print(comb(n, k))
+    # print(Legendre_a(5))
+    # print(Legendre_a(10))
+    # # print(Legendre_P(n, -0.99))
 
-    result_bisection = bisection_all(n, x_legendre)
-    visualization(n, -1, 1, result_bisection)
-    print(result_bisection)
+    # result_bisection = bisection_all(n, x_legendre)
+    # visualization(n, -1, 1, result_bisection)
+    # print(result_bisection)
 
-    result_newton = newton_all(n, x_newton)
-    visualization(n, -1, 1, result_newton)
-    print(result_newton)
+    # result_newton = newton_all(n, x_newton)
+    # visualization(n, -1, 1, result_newton)
+    # print(result_newton)
+
+    result, middle_value, num_calc = bisection(n, -1, -0.75)
+    true_value = bisection(n, -1, -0.75, error=1e-15, max_loop=1000)[0]
+    visualization_convergence(n, middle_value, true_value)
