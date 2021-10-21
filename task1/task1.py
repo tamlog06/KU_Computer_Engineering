@@ -28,7 +28,7 @@ def Legendre_a(n: float):
 def Legendre_P(n: float, x: float):
     P = 0
     a = Legendre_a(n)
-    for k in range(n+1):
+    for k in range(math.ceil(n+1)):
         P += a[k] * x**k
     return P
 
@@ -85,69 +85,49 @@ def bisection_all(n, x: list):
         result.append(bisection(n, x_min, x_max))
     return result
 
-#Newton法（方程式の関数項、探索の開始点、微小量、誤差範囲、最大反復回数）
-def newton(n, x0, eps=1e-9, error=1e-9, max_loop=100, option=False):
-    # 計算途中の値と反復数を含むリスト
+# newton法で解を一つ出す
+def newton(x0, n, error=1e-9, max_loop=100, option=False):
+    # 計算途中の値を出す
     middle_value = []
 
-    num_calc = 0  #計算回数
-    print("{:3d}:  x = {:.15f}".format(num_calc, x0))
-
-    #ずっと繰り返す
-    while True:
-        #中心差分による微分値
-        P_df = (Legendre_P(n, x0+eps) - Legendre_P(n, x0-eps)) / (2*eps)
-        # func_df = (func_f(x0 +eps) -func_f(x0 -eps))/(2*eps)
-        # if(abs(func_df) <= eps):  #傾きが0に近ければ止める
-        if abs(P_df) <= eps:
-            print("error: abs(P_df) is too small (<=", eps, ").")
-            quit()
-
-        #次の解を計算
-        x1 = x0 - Legendre_P(n, x0) / P_df
-
-        num_calc += 1  #計算回数を数える
-
-        middle_value.append([x1, num_calc])
-        print("{:3d}:  x = {:.15f}".format(num_calc, x0))
-
-        #「誤差範囲が一定値以下」または「計算回数が一定値以上」ならば終了
-        if(abs(x1-x0)<=error or max_loop<=num_calc):
-            break
-
-        #解を更新
-        x0 = x1
-
-    #最終的に得られた解
-    print("x = {:.15f}".format(x0))
-
-    if option:
-        return x0, middle_value
-    else:
-        return x0
-
-def newton_zero(x0, n, error=1e-9, max_loop=100, option=False):
     for i in range(max_loop):
-        x1 = x0 - Legendre_P(n, x0) / diff_legendre(n, x0)
+        x1 = x0 - Legendre_P(n, x0) / diff_Legendre(n, x0)
         if abs(x1 - x0) < error:
             break
         x0 = x1
+
+        middle_value.append([x1, i+1])
     if i == 50:
         print('zero point not found')
-    return x1
-
-def newton_all(n, x: list):
-    result = []
-    for x0 in x:
-        result.append(newton_zero(n, x0))
-    return set(result)
+    
+    if option:
+        return x1, middle_value
+    else:
+        return x1
 
 #ルジャンドル多項式の微分
-def diff_legendre(n, x):
+def diff_Legendre(n, x):
     if (x == 1) or (x == -1):
             x += 0.001
-    return n*(Legendre_P(n-1, x) - x*legendre_P(n,x))/(1-x**2)
+    return n*(Legendre_P(n-1, x) - x*Legendre_P(n,x))/(1-x**2)
 
+# newton法で全ての解を出す
+# option==Trueなら、初期近似解を自動で、Falseなら決め打ち
+def newton_all(n, x=[], option=False):
+    result = []
+    if option:
+        for i in range(math.ceil(n)):
+            x = np.cos(((i+0.75)/(n+0.5))*np.pi)
+            point = newton(x, n)
+            if abs(point) < 1e-9:
+                point = 0
+            result.append(point)
+    else:
+        if not x:
+            print("list is not added")
+        for x0 in x:
+            result.append(newton(x0, n))
+    return result
 
 #可視化（方程式の関数項、グラフ左端、グラフ右端、方程式の解）
 def visualization(n, x_min, x_max, x_solved):
@@ -185,9 +165,9 @@ def visualization_convergence(n, middle_value, true_value):
 
 # 課題1.1
 def main1(n, k):
-    print(comb(n, k))
+    # print(comb(n, k))
     print(Legendre_a(n=5))
-    print(Legendre_a(n=10))
+    # print(Legendre_a(n=10))
 
 # 課題1.2
 # x_legendreは初期区間のリスト
@@ -213,17 +193,20 @@ def main3(x_newton):
     visualization_convergence(n, middle_value, true_value)
     
     # 二分法と同じ解を出す
-    result, middle_value = newton(n, -1, option=True)
+    result, middle_value = newton(-1, n, option=True)
     # 修正量の絶対値が10^-15以下として、真の値とする
-    true_value = newton(n, -1, eps=1e-15, error=1e-15, max_loop=1000)
+    true_value = newton(-1, n, error=1e-15, max_loop=1000)
     visualization_convergence(n, middle_value, true_value)
 
+# 課題1.4
+def main4(n):
+    print(newton_all(n, option=True))
 
 if __name__ == "__main__":
     n = 5
     k = 3
     x_legendre = [[-1, -0.75], [-0.75, -0.3], [-0.3, 0.25], [0.25, 0.75], [0.75, 1.0]]
-    x_newton = [-1, -0.5, 0, 0.5, 0.9]
+    x_newton = [-1, -0.5, 0.1, 0.5, 1]
 
     main1(n, k)
 
@@ -231,5 +214,7 @@ if __name__ == "__main__":
 
     main3(x_newton)
 
-    # result_bisection = bisection(30, 0.95, 1)
-    # print(result_bisection)
+    main4(6)
+    # n = 6.4
+    # result_newton = newton_all(n, option=True)
+    # visualization(n, -1, 1, result_newton)
