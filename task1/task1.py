@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import math
 
 # 二項係数
 def comb(n: float, k: int):
@@ -125,42 +126,55 @@ def newton(n, x0, eps=1e-9, error=1e-9, max_loop=100, option=False):
     else:
         return x0
 
+def newton_zero(x0, n, error=1e-9, max_loop=100, option=False):
+    for i in range(max_loop):
+        x1 = x0 - Legendre_P(n, x0) / diff_legendre(n, x0)
+        if abs(x1 - x0) < error:
+            break
+        x0 = x1
+    if i == 50:
+        print('zero point not found')
+    return x1
+
 def newton_all(n, x: list):
     result = []
     for x0 in x:
         result.append(newton(n, x0))
     return set(result)
 
+#ルジャンドル多項式の微分
+def diff_legendre(n, x):
+    if (x == 1) or (x == -1):
+            x += 0.001
+    return n*(Legendre_P(n-1, x) - x*legendre_P(n,x))/(1-x**2)
+
+
 #可視化（方程式の関数項、グラフ左端、グラフ右端、方程式の解）
 def visualization(n, x_min, x_max, x_solved):
     plt.xlabel("$x$")  #x軸の名前
     plt.ylabel("$f(x)$")  #y軸の名前
     plt.grid()  #点線の目盛りを表示
-    plt.axhline(0, color='#000000')  #f(x)=0の線
+    plt.axhline(0, color='k')  #f(x)=0の線
 
     #関数
     exact_x = np.arange(x_min,x_max, (x_max-x_min)/500.0)
     exact_y = Legendre_P(n, exact_x)
 
-    plt.plot(exact_x,exact_y, label="$f(x)$", color='#ff0000')  #関数を折線グラフで表示
+    plt.plot(exact_x,exact_y, label="$f(x)$", color='r')  #関数を折線グラフで表示
 
     for x in x_solved:
-        plt.scatter(x,0.0)  #数値解を点グラフで表示
-        plt.text(x,0.0, "$x$ = {:.9f}".format(x), va='bottom', color='#0000ff')
+        plt.scatter(x,0.0, c='b')  #数値解を点グラフで表示
+        plt.text(x,0.0, "$x$ = {:.9f}".format(x), va='bottom', color='b')
     plt.show()  #グラフを表示
 
 def visualization_convergence(n, middle_value, true_value):
     plt.xlabel("$loop$")
     plt.ylabel("$error$")
     plt.grid()
-    plt.axhline(0, color='#000000')
-
+    plt.axhline(0, color='k')
 
     for middle, loop in middle_value:
-        # print(true_value)
-        # print(middle)
         plt.scatter(loop, abs(true_value - middle), c="b")
-        # plt.text(loop ,0.0, "$x$ = {:.9f}".format(loop), va='bottom', color='#0000ff')
 
     ax = plt.gca()
     ax.spines['top'].set_color('none')
@@ -169,29 +183,53 @@ def visualization_convergence(n, middle_value, true_value):
     plt.grid(which="both") # グリッド表示。"both"はxy軸両方にグリッドを描く。
     plt.show()
 
+# 課題1.1
+def main1(n, k):
+    print(comb(n, k))
+    print(Legendre_a(n=5))
+    print(Legendre_a(n=10))
+
+# 課題1.2
+# x_legendreは初期区間のリスト
+def main2(x_legendre):
+    n = 5
+    result_bisection = bisection_all(n, x_legendre)
+    visualization(n, -1, 1, result_bisection)
+    print(result_bisection)
+
+# 課題1.3
+# x_newtonは初期近似解のリスト
+def main3(x_newton):
+    n = 5
+    result_newton = newton_all(n, x_newton)
+    visualization(n, -1, 1, result_newton)
+    print(result_newton)
+
+    # 反復の速さをグラフに描画
+    # [-1, -0.75]の区間の解を出す時の反復の速さ
+    result, middle_value = bisection(n, -1, -0.75, option=True)
+    # 修正量の絶対値が10^-15以下として、真の値とする
+    true_value = bisection(n, -1, -0.75, error=1e-15, max_loop=1000)
+    visualization_convergence(n, middle_value, true_value)
+    
+    # 二分法と同じ解を出す
+    result, middle_value = newton(n, -1, option=True)
+    # 修正量の絶対値が10^-15以下として、真の値とする
+    true_value = newton(n, -1, eps=1e-15, error=1e-15, max_loop=1000)
+    visualization_convergence(n, middle_value, true_value)
+
+
 if __name__ == "__main__":
     n = 5
     k = 3
     x_legendre = [[-1, -0.75], [-0.75, -0.3], [-0.3, 0.25], [0.25, 0.75], [0.75, 1.0]]
     x_newton = [-1, -0.5, 0, 0.5, 0.9]
 
-    # print(comb(n, k))
-    # print(Legendre_a(5))
-    # print(Legendre_a(10))
-    # # print(Legendre_P(n, -0.99))
+    main1(n, k)
 
-    # result_bisection = bisection_all(n, x_legendre)
-    # visualization(n, -1, 1, result_bisection)
+    main2(x_legendre)
+
+    main3(x_newton)
+
+    # result_bisection = bisection(30, 0.95, 1)
     # print(result_bisection)
-
-    # result_newton = newton_all(n, x_newton)
-    # visualization(n, -1, 1, result_newton)
-    # print(result_newton)
-
-    result, middle_value = bisection(n, -1, -0.75, option=True)
-    true_value = bisection(n, -1, -0.75, error=1e-15, max_loop=1000)
-    visualization_convergence(n, middle_value, true_value)
-    
-    result, middle_value = newton(n, -1, option=True)
-    true_value = newton(n, -1, eps=1e-15, error=1e-15, max_loop=1000)
-    visualization_convergence(n, middle_value, true_value)
