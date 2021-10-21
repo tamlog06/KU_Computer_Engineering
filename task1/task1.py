@@ -16,19 +16,16 @@ def comb(n: float, k: int):
         result /= i
     return result
 
-
-# return a
-def Legendre_a(n: float):
+def Legendre_a(n: int):
     a = []
     for k in range(n+1):
         a.append(2**n * comb(n, k) * comb((n+k-1)/2, n))
     return a
 
-# return P
-def Legendre_P(n: float, x: float):
+def Legendre_P(n: int, x: float):
     P = 0
     a = Legendre_a(n)
-    for k in range(math.ceil(n+1)):
+    for k in range(n+1):
         P += a[k] * x**k
     return P
 
@@ -79,14 +76,14 @@ def bisection(n, x_min, x_max, error=1e-9, max_loop=100, option=False):
         return x_mid
 
 # 二分法で全ての解を出す
-def bisection_all(n, x: list):
+def bisection_all(n: int, x: list):
     result = []
     for x_min, x_max in x:
         result.append(bisection(n, x_min, x_max))
     return result
 
 # newton法で解を一つ出す
-def newton(x0, n, error=1e-9, max_loop=100, option=False):
+def newton(x0, n: int, error=1e-9, max_loop=100, option=False):
     # 計算途中の値を出す
     middle_value = []
 
@@ -106,14 +103,14 @@ def newton(x0, n, error=1e-9, max_loop=100, option=False):
         return x1
 
 #ルジャンドル多項式の微分
-def diff_Legendre(n, x):
+def diff_Legendre(n: int, x):
     if (x == 1) or (x == -1):
             x += 0.001
     return n*(Legendre_P(n-1, x) - x*Legendre_P(n,x))/(1-x**2)
 
 # newton法で全ての解を出す
 # option==Trueなら、初期近似解を自動で、Falseなら決め打ち
-def newton_all(n, x=[], option=False):
+def newton_all(n: int, x=[], option=False):
     result = []
     if option:
         for i in range(math.ceil(n)):
@@ -130,7 +127,7 @@ def newton_all(n, x=[], option=False):
     return result
 
 #可視化（方程式の関数項、グラフ左端、グラフ右端、方程式の解）
-def visualization(n, x_min, x_max, x_solved):
+def visualization(n: int, x_min, x_max, x_solved):
     plt.xlabel("$x$")  #x軸の名前
     plt.ylabel("$f(x)$")  #y軸の名前
     plt.grid()  #点線の目盛りを表示
@@ -147,7 +144,7 @@ def visualization(n, x_min, x_max, x_solved):
         plt.text(x,0.0, "$x$ = {:.9f}".format(x), va='bottom', color='b')
     plt.show()  #グラフを表示
 
-def visualization_convergence(n, middle_value, true_value):
+def visualization_convergence(n: int, middle_value, true_value):
     plt.xlabel("$loop$")
     plt.ylabel("$error$")
     plt.grid()
@@ -165,9 +162,9 @@ def visualization_convergence(n, middle_value, true_value):
 
 # 課題1.1
 def main1(n, k):
-    # print(comb(n, k))
+    print(comb(n, k))
     print(Legendre_a(n=5))
-    # print(Legendre_a(n=10))
+    print(Legendre_a(n=10))
 
 # 課題1.2
 # x_legendreは初期区間のリスト
@@ -215,6 +212,3 @@ if __name__ == "__main__":
     main3(x_newton)
 
     main4(6)
-    # n = 6.4
-    # result_newton = newton_all(n, option=True)
-    # visualization(n, -1, 1, result_newton)
