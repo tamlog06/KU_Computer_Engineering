@@ -139,7 +139,7 @@ def newton_zero(x0, n, error=1e-9, max_loop=100, option=False):
 def newton_all(n, x: list):
     result = []
     for x0 in x:
-        result.append(newton(n, x0))
+        result.append(newton_zero(n, x0))
     return set(result)
 
 #ルジャンドル多項式の微分
