@@ -167,7 +167,7 @@ def newton_all(n: int, x=[], option=False, max_loop=100):
 #可視化（方程式の関数項、グラフ左端、グラフ右端、方程式の解）
 def visualization(n: int, x_min, x_max, x_solved, title):
     plt.xlabel("$x$")  #x軸の名前
-    plt.ylabel("$f(x)$")  #y軸の名前
+    plt.ylabel("$P(x)$")  #y軸の名前
     plt.grid()  #点線の目盛りを表示
     plt.axhline(0, color='k')  #f(x)=0の線
     plt.title(title)
@@ -176,7 +176,7 @@ def visualization(n: int, x_min, x_max, x_solved, title):
     exact_x = np.arange(x_min,x_max, (x_max-x_min)/500.0)
     exact_y = Legendre_P(n, exact_x)
 
-    plt.plot(exact_x,exact_y, label="$f(x)$", color='r')  #関数を折線グラフで表示
+    plt.plot(exact_x,exact_y, label="$P(x)$", color='r')  #関数を折線グラフで表示
 
     for x in x_solved:
         plt.scatter(x,0.0, c='b')  #数値解を点グラフで表示
@@ -213,7 +213,7 @@ def main2():
     x_legendre = [[-1, -0.75], [-0.75, -0.25], [-0.25, 0.25], [0.25, 0.75], [0.75, 1.0]]
     n = 5
     result_bisection = bisection_all(n, x_legendre)
-    title = f'Legendre {n}'
+    title = f'Legendre {n} bisection method'
     visualization(n, -1, 1, result_bisection, title)
     print(result_bisection)
 
@@ -223,7 +223,7 @@ def main3():
     x_newton = [-1, -0.5, 0, 0.5, 1]
     n = 5
     result_newton = newton_all(n, x_newton)
-    title = f'Legendre {n}'
+    title = f'Legendre {n} newton method'
     visualization(n, -1, 1, result_newton, title)
     print(result_newton)
 
@@ -263,10 +263,10 @@ def main5():
 if __name__ == "__main__":
     # main1()
 
-    # main2()
+    main2()
 
     # main3()
 
     # main4()
 
-    main5()
+    # main5()
