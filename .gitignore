@@ -1,3 +1,4 @@
 .vscode
 task1/report1*
 task2/report*
+task2/__pycache__
