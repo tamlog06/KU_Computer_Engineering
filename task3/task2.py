@@ -1,6 +1,7 @@
 import math
 from math import cos, sin
 from visualize import *
+import numpy as np
 
 global N, k, m, w, Td, h
 N = 100

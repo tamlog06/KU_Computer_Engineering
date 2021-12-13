@@ -56,10 +56,8 @@ def anime(x, y, title, save_gif=False):
 
     # グラフのリスト作成
     ims=[]
-    for i in range(0, len(y), 5): 
-        # y = np.sin(x + 2*np.pi*(i/10))
+    for i in range(0, len(y)): 
         im = ax.plot(x, y[i], color='b')
-        # グラフをリストに加える
         ims.append(im)
 
     # 各軸のラベル
@@ -70,7 +68,7 @@ def anime(x, y, title, save_gif=False):
     # ax.set_ylim([-0.1, 0.1]) 
 
     # ArtistAnimationにfigオブジェクトとimsを代入してアニメーションを作成
-    anim = animation.ArtistAnimation(fig, ims, interval=5)
+    anim = animation.ArtistAnimation(fig, ims, interval=10)
     plt.show()
     if save_gif:
         anim.save(f'task3/img/{title}.gif', writer='pillow', fps=30) # fpsはデフォルトの5
