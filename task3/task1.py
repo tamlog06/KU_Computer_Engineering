@@ -80,9 +80,32 @@ def task4():
     title = 'The change in maximum error corresponding to the change h (Runge Kutta)'
     visualize(x_axis, logEx, 'p', 'log2 Ex', title, label='log2 Ex', least_square_flag=True, lrange=[0, 10])
 
+def extra():
+    h = (2*math.pi)/(64*w)
+    x, e = Gill(1, 0, h)
+    x_axis = [i for i in range(65)]
+    xc_t = x[:-1]
+    error = e[:-1]
+    visualize(x_axis, xc_t, 'time', 'x_c(t)', 'Runge Kutta Gill method')
+    visualize(x_axis, error, 'time', 'error', 'Runge Kutta Gill error')
+
+    h_list = [2*math.pi/w * 2**(-p) for p in range(2, 21)]
+    error_list = []
+
+    for h in h_list:
+        x, e = Gill(1, 0, h)
+        e_max = max(e)
+        error_list.append(e_max)
+    
+    x_axis = [p for p in range(2, 21)]
+    logEx = [math.log2(error) for error in error_list]
+    title = 'The change in maximum error corresponding to the change h (Runge Kutta Gill)'
+    visualize(x_axis, logEx, 'p', 'log2 Ex', title, label='log2 Ex', least_square_flag=False, lrange=[0, 10])
+
 
 if __name__ == '__main__':
     # task1()
-    task2()
+    # task2()
     # task3()
     # task4()
+    extra()

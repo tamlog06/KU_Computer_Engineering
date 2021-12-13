@@ -49,13 +49,14 @@ def visualize(x, y, xlabel, ylabel, title, x_ticks=True, ylim=None, label=None, 
     os.makedirs('task3/img', exist_ok=True)
     fig.savefig(f'task3/img/{title}.png')
 
-def anime(x, y):
+def anime(x, y, title, save_gif=False):
     # fig, axオブジェクトを作成
     fig, ax = plt.subplots()
+    plt.title(title)
 
     # グラフのリスト作成
     ims=[]
-    for i in range(len(y)): 
+    for i in range(0, len(y), 5): 
         # y = np.sin(x + 2*np.pi*(i/10))
         im = ax.plot(x, y[i], color='b')
         # グラフをリストに加える
@@ -66,11 +67,13 @@ def anime(x, y):
     ax.set_ylabel(r"$y$", fontsize=15)
     # グラフの範囲を設定
     # ax.set_xlim([0, 100])
-    ax.set_ylim([-100, 100]) 
+    # ax.set_ylim([-0.1, 0.1]) 
 
     # ArtistAnimationにfigオブジェクトとimsを代入してアニメーションを作成
-    anim = animation.ArtistAnimation(fig, ims, interval=10)
+    anim = animation.ArtistAnimation(fig, ims, interval=5)
     plt.show()
+    if save_gif:
+        anim.save(f'task3/img/{title}.gif', writer='pillow', fps=30) # fpsはデフォルトの5
 
 # # 反復計算法のそれぞれについて計算回数と誤差の関係を一つのグラフに重ねて可視化
 # def visualization_convergence(jacobi_err, gauss_err, sor_err, title, ylim=None):
