@@ -1,5 +1,6 @@
 .vscode
-task1/report1*
-task2/report*
-task2/__pycache__
+.DS_Store
+*report*
+*__pycache__
 test.py
+Book1.xlsx
