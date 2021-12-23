@@ -19,7 +19,7 @@ def main2(boundary):
     u[0][0] = (tanh((-dt-Ts)/a) + 1)/2 - (tanh((-dt-Ts-TD)/a) + 1)/2
     u[1][0] = (tanh((0-Ts)/a) + 1)/2 - (tanh((0-Ts-TD)/a) + 1)/2
     x_list = [u[1]]
-    T = 20*(Ts+TD)
+    T = 5*(Ts+TD)
     k = 1
     tk = dt
     while tk < T:
@@ -39,12 +39,16 @@ def main2(boundary):
         tk += dt
 
     x_axis = [i for i in range(N)]
-    anime(x_axis, x_list, 'task3-2')
+    if boundary:
+        title = f'3.3.2 x_movie (Fixed end)'
+    else:
+        title = f'3.3.2 x_movie (Free end)'
+    anime(x_axis, x_list, title, fps=10, save_movie=True)
 
 def main3(boundary):
     u = np.zeros((2, N), dtype=float)
     x_list = [u[1]]
-    T = 20*(Ts+TD)
+    T = 5*(Ts+TD)
     k = 1
     tk = dt
     while tk < T:
@@ -65,8 +69,12 @@ def main3(boundary):
         tk += dt
 
     x_axis = [i for i in range(N)]
-    anime(x_axis, x_list, 'task3')
+    if boundary:
+        title = f'3.3.3 x_movie (Fixed end)'
+    else:
+        title = f'3.3.3 x_movie (Free end)'
+    anime(x_axis, x_list, title, fps=10, save_movie=True)
 
 if __name__ == '__main__':
-    main2(False)
-    main3(False)
+    main2(True)
+    main3(True)

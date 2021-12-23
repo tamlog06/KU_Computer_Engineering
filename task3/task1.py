@@ -1,7 +1,6 @@
 import math
 from math import cos, sin
 from visualize import *
-# from functions import *
 
 global k
 global m
@@ -118,8 +117,8 @@ def main1():
     x_axis = [i for i in range(65)]
     xc_t = x[:-1]
     error = e[:-1]
-    visualize(x_axis, xc_t, 'time', 'x_c(t)', 'Euler Method')
-    visualize(x_axis, error, 'time', 'error', 'Euler error')
+    visualize(x_axis, xc_t, 'time', '$x_c(t)$', '3.1.1 Euler x_c(t)')
+    visualize(x_axis, error, 'time', 'error', '3.1.1 Euler error')
 
 def main2():
     h_list = [2*math.pi/w * 2**(-p) for p in range(2, 21)]
@@ -132,7 +131,7 @@ def main2():
     
     x_axis = [p for p in range(2, 21)]
     y_axis = [math.log2(error) for error in error_list]
-    title = 'The change in maximum error corresponding to the change h (Euler)'
+    title = '3.1.2 maximum error - p (Euler)'
     visualize(x_axis, y_axis, 'p', 'log2 Ex', title, label='log2 Ex' ,least_square_flag=True, lrange=[3, None])
 
 def main3():
@@ -142,8 +141,8 @@ def main3():
     x_axis = [i for i in range(65)]
     xc_t = x[:-1]
     error = e[:-1]
-    visualize(x_axis, xc_t, 'time', 'x_c(t)', 'Heun method')
-    visualize(x_axis, error, 'time', 'error', 'Heun error')
+    visualize(x_axis, xc_t, 'time', '$x_c(t)$', '3.1.3 Heun x_c(t)')
+    visualize(x_axis, error, 'time', 'error', '3.1.3 Heun error')
 
     h_list = [2*math.pi/w * 2**(-p) for p in range(2, 21)]
     error_list = []
@@ -155,7 +154,7 @@ def main3():
     
     x_axis = [p for p in range(2, 21)]
     logEx = [math.log2(error) for error in error_list]
-    title = 'The change in maximum error corresponding to the change h (Heun)'
+    title = '3.1.3 maximum error - p (Heun)'
     visualize(x_axis, logEx, 'p', 'log2 Ex', title, label='log2 Ex', least_square_flag=True, lrange=[1, -3])
 
 def main4():
@@ -164,8 +163,8 @@ def main4():
     x_axis = [i for i in range(65)]
     xc_t = x[:-1]
     error = e[:-1]
-    visualize(x_axis, xc_t, 'time', 'x_c(t)', 'Runge Kutta method')
-    visualize(x_axis, error, 'time', 'error', 'Runge Kutta error')
+    visualize(x_axis, xc_t, 'time', '$x_c(t)$', '3.1.4 Runge Kutta x_c(t)')
+    visualize(x_axis, error, 'time', 'error', '3.1.4 Runge Kutta error')
 
     h_list = [2*math.pi/w * 2**(-p) for p in range(2, 21)]
     error_list = []
@@ -177,7 +176,7 @@ def main4():
     
     x_axis = [p for p in range(2, 21)]
     logEx = [math.log2(error) for error in error_list]
-    title = 'The change in maximum error corresponding to the change h (Runge Kutta)'
+    title = '3.1.4 maximum error - p (Runge Kutta)'
     visualize(x_axis, logEx, 'p', 'log2 Ex', title, label='log2 Ex', least_square_flag=True, lrange=[0, 10])
 
 # TODO
@@ -187,8 +186,8 @@ def extra():
     x_axis = [i for i in range(65)]
     xc_t = x[:-1]
     error = e[:-1]
-    visualize(x_axis, xc_t, 'time', 'x_c(t)', 'Runge Kutta Gill method')
-    visualize(x_axis, error, 'time', 'error', 'Runge Kutta Gill error')
+    visualize(x_axis, xc_t, 'time', '$x_c(t)$', '3.1.extra Runge Kutta Gill x_c(t)')
+    visualize(x_axis, error, 'time', 'error', '3.1.extra Runge Kutta Gill error')
 
     h_list = [2*math.pi/w * 2**(-p) for p in range(2, 21)]
     error_list = []
@@ -201,13 +200,13 @@ def extra():
     
     x_axis = [p for p in range(2, 21)]
     logEx = [math.log2(error) for error in error_list]
-    title = 'The change in maximum error corresponding to the change h (Runge Kutta Gill)'
+    title = '3.1.extra maximum error - p (Runge Kutta Gill)'
     visualize(x_axis, logEx, 'p', 'log2 Ex', title, label='log2 Ex', least_square_flag=False, lrange=[0, 10])
 
 
 if __name__ == '__main__':
-    # main1()
-    # main2()
-    # main3()
-    # main4()
+    main1()
+    main2()
+    main3()
+    main4()
     extra()
