@@ -1,7 +1,6 @@
 ![demo](https://raw.github.com/wiki/takuyama29/WorldTracking/images/Untitled.gif)
 
-![Euler(Free_end)]
-(https://raw.github.com/wiki/tamlog06/KU_Computer_Engineering/3.2/3.2%20Euler%20x_movie%20(Free%20end).gif)
+![Euler(Free_end)](https://raw.github.com/wiki/tamlog06/KU_Computer_Engineering/3.2/3.2%20Euler%20x_movie%20(Free%20end).gif)
 
 ![Heun(Free_end)]
 (https://raw.github.com/wiki/tamlog06/KU_Computer_Engineering/3.2/3.2 Heun x_movie (Free end).gif)
