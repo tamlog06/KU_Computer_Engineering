@@ -1,6 +1,7 @@
 .vscode
 *.DS_Store
 *report*
+**.docx
 *__pycache__
 test.py
 Book1.xlsx
