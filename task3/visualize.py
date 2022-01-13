@@ -94,5 +94,6 @@ def movie(x, y, title, fps, folder, interval=1, save_movie=False):
     plt.show()
     os.makedirs(f'task3/img/{folder}', exist_ok=True)
     if save_movie:
-        anim.save(f'task3/img/{folder}/{title}.mp4', writer='ffmpeg', fps=100) # fpsはデフォルトの5
+        anim.save(f'task3/img/{folder}/{title}.mp4', writer='ffmpeg', fps=100)
+        # anim.save(f'task3/img/{folder}/{title}.gif', writer='w', fps=100)
 
