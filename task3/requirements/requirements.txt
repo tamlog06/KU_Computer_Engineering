@@ -1,0 +1,5 @@
+# python3.8.11
+matplotlib
+matplotlib-inline
+numpy
+tqdm
